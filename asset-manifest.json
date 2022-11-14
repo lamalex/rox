@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/rox/static/css/main.e6c13ad2.css",
+    "main.js": "/rox/static/js/main.a4dc7d6f.js",
+    "static/js/787.7a9826f3.chunk.js": "/rox/static/js/787.7a9826f3.chunk.js",
+    "static/media/roxui_bg.wasm": "/rox/static/media/roxui_bg.ff89fa30e657cba1be3a.wasm",
+    "index.html": "/rox/index.html",
+    "main.e6c13ad2.css.map": "/rox/static/css/main.e6c13ad2.css.map",
+    "main.a4dc7d6f.js.map": "/rox/static/js/main.a4dc7d6f.js.map",
+    "787.7a9826f3.chunk.js.map": "/rox/static/js/787.7a9826f3.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.a4dc7d6f.js"
+  ]
+}
