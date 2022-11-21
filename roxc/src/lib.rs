@@ -1,6 +1,8 @@
 use scanner::Scanner;
 
 mod scanner;
+mod token;
+mod token_type;
 
 #[derive(Debug, Clone)]
 pub struct ErrorReport {
@@ -15,9 +17,5 @@ pub fn run(source: &str) -> Result<String, ErrorReport> {
         println!("{token:?}");
     }
 
-    Err(ErrorReport {
-        source: source.into(),
-        line: 0,
-        message: "".to_string(),
-    })
+    Ok("".into())
 }

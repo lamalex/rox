@@ -57,7 +57,7 @@ fn run_prompt() -> Result<()> {
         let readline = rl.readline(">> ");
         match readline {
             Ok(line) => {
-                let _ = roxc::run(&line).map_err(error);
+                let _ = roxc::run(&line);
             }
             Err(ReadlineError::Interrupted) => {
                 println!("⚠️: CTRL-C");
