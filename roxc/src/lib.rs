@@ -2,7 +2,6 @@ use scanner::Scanner;
 
 mod scanner;
 mod token;
-mod token_type;
 
 #[derive(Debug, Clone)]
 pub struct ErrorReport {
@@ -15,6 +14,9 @@ pub fn run(source: &str) -> Result<String, ErrorReport> {
     let scanner = Scanner::new(source);
     for token in scanner {
         println!("{token:?}");
+        if let Err(e) = token {
+            println!("{}", e);
+        }
     }
 
     Ok("".into())

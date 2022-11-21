@@ -1,4 +1,6 @@
-use crate::{token::Token, token_type::TokenType::*, ErrorReport};
+use super::error::ScannerError;
+use crate::token::Token;
+use crate::token::TokenType::*;
 
 pub struct Scanner<'a> {
     source: &'a str,
@@ -21,7 +23,7 @@ impl<'a> Scanner<'a> {
 }
 
 impl<'a> Iterator for Scanner<'a> {
-    type Item = Result<Token, ErrorReport>;
+    type Item = Result<Token, ScannerError>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.done {
@@ -41,7 +43,7 @@ impl<'a> Iterator for Scanner<'a> {
 }
 
 impl<'a> Scanner<'a> {
-    fn scan_token(&mut self) -> Option<Result<Token, ErrorReport>> {
+    fn scan_token(&mut self) -> Option<Result<Token, ScannerError>> {
         let c = self.advance()?;
 
         match c {
@@ -77,19 +79,19 @@ impl<'a> Scanner<'a> {
             }),
             '/' => {
                 if self.match_lexeme('/') {
-                    while self.peek().map(|c| c == '\n').is_some() {
+                    while self.peek().iter().filter(|c| **c != '\n').next().is_some() {
                         self.advance();
                     }
-                    return Some(self.scan_token()?);
+                    return self.next();
                 } else {
                     Some(Slash)
                 }
             }
-            ' ' | '\t' | '\r' => return self.scan_token(),
             '\n' => {
                 self.line += 1;
-                return self.scan_token();
+                return self.next();
             }
+            c if c.is_whitespace() => return self.next(),
             _ => None,
         }
         .map(|t| {
@@ -100,16 +102,18 @@ impl<'a> Scanner<'a> {
             })
         })
         .or_else(|| {
-            Some(Err(ErrorReport {
+            Some(Err(ScannerError {
+                lexeme: c,
                 line: self.line,
+                position: self.current,
                 source: self.source.into(),
-                message: "Unrecognized token".into(),
+                message: format!("Unrecognized token"),
             }))
         })
     }
 
     fn peek(&self) -> Option<char> {
-        return self.source.chars().nth(self.current);
+        self.source.chars().nth(self.current)
     }
 
     fn match_lexeme(&mut self, expected: char) -> bool {
