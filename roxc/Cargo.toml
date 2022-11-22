@@ -8,3 +8,6 @@ edition = "2021"
 [lib]
 name = "roxc"
 path = "src/lib.rs"
+
+[dependencies]
+phf = { version = "0.11.1", features = ["macros"] }

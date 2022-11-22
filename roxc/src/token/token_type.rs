@@ -24,8 +24,8 @@ pub enum TokenType {
     LessEqual,
 
     // literals
-    Identifier(String),
-    String(String),
+    Identifier(std::string::String),
+    String(std::string::String),
     Number(f64),
 
     // Keywords
@@ -48,3 +48,28 @@ pub enum TokenType {
 
     Eof,
 }
+
+impl TokenType {
+    pub fn parse_keyword(key: &str) -> Option<TokenType> {
+        KEYWORDS.get(key).cloned()
+    }
+}
+use TokenType::*;
+static KEYWORDS: phf::Map<&'static str, TokenType> = phf::phf_map! {
+    "and" => And,
+    "class" => Class,
+    "else" => Else,
+    "false" => False,
+    "for" => For,
+    "fun" => Fun,
+    "if" => If,
+    "nil" => Nil,
+    "or" => Or,
+    "print" => Print,
+    "return" => Return,
+    "super" => Super,
+    "this" => This,
+    "true" => True,
+    "var" => Var,
+    "while" => While
+};

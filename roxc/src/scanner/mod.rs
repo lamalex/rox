@@ -1,5 +1,6 @@
 use self::error::ScannerErrorMeta;
 use crate::token::Token;
+use crate::token::TokenType;
 use crate::token::TokenType::*;
 
 pub use error::ScannerError;
@@ -142,6 +143,18 @@ impl<'a> Scanner<'a> {
                         position: self.current,
                         source: self.source.into(),
                     })),
+                }
+            }
+            c if c.is_alphabetic() => {
+                while self.peek().iter().all(|c| c.is_alphanumeric()) {
+                    self.advance();
+                }
+
+                let lexeme = &self.source[self.start..self.current];
+
+                match TokenType::parse_keyword(lexeme) {
+                    Some(t) => Ok(t),
+                    None => Ok(Identifier(lexeme.into())),
                 }
             }
             _ => Err(ScannerError::UnrecognizedToken(ScannerErrorMeta {
