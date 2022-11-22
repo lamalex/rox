@@ -83,7 +83,17 @@ impl<'a> Scanner<'a> {
                 Greater
             }),
             '/' => {
-                if self.match_lexeme('/') {
+                if self.match_lexeme('*') {
+                    while self.peek_2().iter().any(|c| c.as_str() != "*/") {
+                        if self.peek() == Some('\n') {
+                            self.line += 1;
+                        }
+                        self.advance();
+                    }
+                    self.advance();
+                    self.advance();
+                    return self.next();
+                } else if self.match_lexeme('/') {
                     while self.peek().iter().any(|c| *c != '\n') {
                         self.advance();
                     }
@@ -184,6 +194,16 @@ impl<'a> Scanner<'a> {
 
     fn peek(&self) -> Option<char> {
         self.source.chars().nth(self.current)
+    }
+
+    fn peek_2(&self) -> Option<std::string::String> {
+        let next_2: std::string::String = self.source.chars().skip(self.current).take(2).collect();
+
+        if next_2.is_empty() {
+            None
+        } else {
+            Some(next_2)
+        }
     }
 
     fn match_lexeme(&mut self, expected: char) -> bool {
