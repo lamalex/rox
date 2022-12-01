@@ -1,5 +1,6 @@
 use scanner::Scanner;
 
+mod parser;
 mod scanner;
 mod token;
 
